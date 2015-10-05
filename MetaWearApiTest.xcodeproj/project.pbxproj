@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17C64B091BC337240063BD73 /* KiwiSDK in Resources */ = {isa = PBXBuildFile; fileRef = 17C64B081BC337240063BD73 /* KiwiSDK */; settings = {ASSET_TAGS = (); }; };
 		4013B0CF198F18C5009925DA /* AccelerometerFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4013B0CC198F18C5009925DA /* AccelerometerFilter.m */; };
 		4013B0D5198F1D1B009925DA /* APLGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4013B0D4198F1D1B009925DA /* APLGraphView.m */; };
 		402D420F198843BE0011ADB1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402D420E198843BE0011ADB1 /* Foundation.framework */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		17C64B081BC337240063BD73 /* KiwiSDK */ = {isa = PBXFileReference; lastKnownFileType = folder; path = KiwiSDK; sourceTree = "<group>"; };
 		362524CD4D17712CD975B950 /* libPods-MetaWearApiTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MetaWearApiTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4013B0CB198F18C5009925DA /* AccelerometerFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerFilter.h; sourceTree = "<group>"; };
 		4013B0CC198F18C5009925DA /* AccelerometerFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerFilter.m; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 		402D4202198843BE0011ADB1 = {
 			isa = PBXGroup;
 			children = (
+				17C64B081BC337240063BD73 /* KiwiSDK */,
 				4013B0CA198F18C5009925DA /* Accelerometer */,
 				40D97BFA19897CBB00F55A09 /* MetaWearApiTest */,
 				40D97C1119897DE100F55A09 /* Supporting Files */,
@@ -208,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40D97C1619897F0100F55A09 /* InfoPlist.strings in Resources */,
+				17C64B091BC337240063BD73 /* KiwiSDK in Resources */,
 				40D97BF819897CB400F55A09 /* Images.xcassets in Resources */,
 				40D97BF919897CB400F55A09 /* Main.storyboard in Resources */,
 			);
@@ -354,6 +358,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -361,6 +366,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MetaWearApiTest/MetaWearApiTest-Prefix.pch";
 				INFOPLIST_FILE = "MetaWearApiTest/MetaWearApiTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = MetaWearApiTest;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -374,6 +380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -381,6 +388,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MetaWearApiTest/MetaWearApiTest-Prefix.pch";
 				INFOPLIST_FILE = "MetaWearApiTest/MetaWearApiTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = MetaWearApiTest;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
