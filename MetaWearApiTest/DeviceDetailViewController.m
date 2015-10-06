@@ -39,6 +39,7 @@
 
 @interface DeviceDetailViewController () <MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UISwitch *connectionSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *kiwiSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *connectionStateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
