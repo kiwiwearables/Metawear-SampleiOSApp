@@ -1124,10 +1124,9 @@
         [self.gyroBMI160Graph addX:obj.x * .008 y:obj.y * .008 z:obj.z * .008];
         [array addObject:obj];
         
-        
-        NSNumber* x = [NSNumber numberWithFloat:obj.x * .008];
-        NSNumber* y = [NSNumber numberWithFloat:obj.y * .008];
-        NSNumber* z = [NSNumber numberWithFloat:obj.z * .008];
+        NSNumber* x = [NSNumber numberWithFloat:obj.x];
+        NSNumber* y = [NSNumber numberWithFloat:obj.y];
+        NSNumber* z = [NSNumber numberWithFloat:obj.z];
         [self addX:x andY:y andZ:z andType:1];
     }];
 }
@@ -1175,7 +1174,7 @@
             // Stream a package
             // grab the package and remove it from the queue
             
-            NSMutableDictionary* data = [NSMutableDictionary dictionaryWithObjectsAndKeys:ax,@"az",ay,@"ay",az,@"az",gx,@"gy",gy,@"gy",gz,@"gz", nil];
+            NSMutableDictionary* data = [NSMutableDictionary dictionaryWithObjectsAndKeys:ax,@"ax",ay,@"ay",az,@"az",gx,@"gx",gy,@"gy",gz,@"gz", nil];
             NSLog(@"Sending %@",data);
             [self.kiwiSensorStream fullyStreamForDeviceId:@"Meta1" WithData:data];
             
@@ -1593,8 +1592,8 @@
     @try {
         
         //set sample rate at 50Hz
-        [[self.accelerometerBMI160Frequency titleForSegmentAtIndex:self.accelerometerBMI160Frequency.selectedSegmentIndex] floatValue];
-        [[self.gyroBMI160Frequency titleForSegmentAtIndex:self.gyroBMI160Frequency.selectedSegmentIndex] floatValue];
+//        [[self.accelerometerBMI160Frequency titleForSegmentAtIndex:self.accelerometerBMI160Frequency.selectedSegmentIndex] floatValue];
+//        [[self.gyroBMI160Frequency titleForSegmentAtIndex:self.gyroBMI160Frequency.selectedSegmentIndex] floatValue];
         
         // Programmatically do button press and change state.
         
