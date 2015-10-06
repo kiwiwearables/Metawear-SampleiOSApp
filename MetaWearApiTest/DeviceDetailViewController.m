@@ -36,6 +36,9 @@
 #import "DeviceDetailViewController.h"
 #import "MBProgressHUD.h"
 #import "APLGraphView.h"
+#import "KiwiThirdpartySensorStream.h"
+// packet period to update the UI at to show streaming data
+#define kUIPacketRefreshPeriod 1
 
 @interface DeviceDetailViewController () <MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UISwitch *connectionSwitch;
@@ -171,6 +174,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *ambientLightLTR329StopStream;
 @property (weak, nonatomic) IBOutlet UILabel *ambientLightLTR329Illuminance;
 
+@property (strong, nonatomic) NSArray *sensorData;
 
 @property (nonatomic, strong) NSMutableArray *streamingEvents;
 @end
@@ -395,10 +399,14 @@
     }
 }
 
-
 - (IBAction)connectionSwitchPressed:(id)sender
 {
     [self connectDevice:self.connectionSwitch.on];
+}
+
+- (IBAction)kiwiSwitchPressed:(id)sender
+{
+    [self connectKiwi:self.kiwiSwitch.on];
 }
 
 
@@ -670,6 +678,12 @@
                                             dataElement.x,
                                             dataElement.y,
                                             dataElement.z] dataUsingEncoding:NSUTF8StringEncoding]];
+            
+//            [_sensorData appendData: [[NSArray
+//                                       dataElement.x,
+//                                       dataElement.y,
+//                                       dataElement.z]]];
+            
         }
     }
     [self sendMail:accelerometerData title:@"AccData"];
@@ -1428,6 +1442,7 @@
     }];
 }
 
+
 - (IBAction)ambientLightLTR329StopStreamPressed:(id)sender
 {
     [self.ambientLightLTR329StartStream setEnabled:YES];
@@ -1437,6 +1452,64 @@
     [self.streamingEvents removeObject:ambientLightLTR329.periodicIlluminance];
     [ambientLightLTR329.periodicIlluminance stopNotifications];
     self.ambientLightLTR329Illuminance.text = @"X.XXX";
+}
+
+//function to capture raw sensor data and package into stream data array for kiwi library
+- (void)onSensorData:(SensorData*) sensorData {
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    //        if ( dataCount > 0 && dataCount % kUIPacketRefreshPeriod == 0 ) {
+    
+
+    //
+    [self.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
+        accelData = NSArray[ obj.x, obj.y, obj.z ]);
+    }];
+    
+    [self.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
+        gryoData = NSArray[ obj.x, obj.y, obj.z ]);
+    }];
+    
+    [self.stream streamForDeviceId:_deviceId
+                                AX:[NSNumber numberWithFloat:accelData[0]]
+                                AY:[NSNumber numberWithFloat:accelData[1]]
+                                AZ:[NSNumber numberWithFloat:accelData[2]]
+                                GX:[NSNumber numberWithFloat:gyroData[0]]
+                                GY:[NSNumber numberWithFloat:gyroData[1]]
+                                GZ:[NSNumber numberWithFloat:gyroData[2]]];
+    
+    //            float AP = sensorData.accelerometerX * sensorData.accelerometerX + sensorData.accelerometerY * sensorData.accelerometerY + sensorData.accelerometerZ * sensorData.accelerometerZ;
+    //            self.APLabel.text = [NSString stringWithFormat:@"%f", AP];
+    //
+    //            float RP = sensorData.gyroscopeX * sensorData.gyroscopeX + sensorData.gyroscopeY * sensorData.gyroscopeY + sensorData.gyroscopeZ * sensorData.gyroscopeZ;
+    //            self.RPLabel.text = [NSString stringWithFormat:@"%f", RP];
+    
+    //            NSLog(@"%u %f, %f, %f --------", sensorData.timestamp, sensorData.accelerometerX, sensorData.accelerometerY, sensorData.accelerometerZ );
+    //        }
+    //    });
+}
+
+//toggle button connection
+- (void)connectKiwi:(BOOL)on
+{
+    //run sensorData function every time new data is available
+    @try {
+        
+        //set sample rate at 50Hz
+        [[self.accelerometerBMI160Frequency titleForSegmentAtIndex:self.accelerometerBMI160Frequency.selectedSegmentIndex] floatValue];
+        [[self.gyroBMI160Frequency titleForSegmentAtIndex:self.gyroBMI160Frequency.selectedSegmentIndex] floatValue];
+        
+        [self.accelerometerBMI160StartStream setEnabled:YES];
+        [self.accelerometerBMI160StopStream setEnabled:NO];
+        [self.gyroBMI160StartStream setEnabled:YES];
+        [self.gyroBMI160StopStream setEnabled:NO];
+        
+        //run onSensorData function
+        
+        NSLog(@"streaming sensor values");
+    }
+    @catch (NSException *exception) {
+        NSLog(@"streaming error");
+    }
 }
 
 @end

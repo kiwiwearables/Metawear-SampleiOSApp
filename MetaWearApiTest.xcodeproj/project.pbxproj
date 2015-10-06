@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		17C64B091BC337240063BD73 /* KiwiSDK in Resources */ = {isa = PBXBuildFile; fileRef = 17C64B081BC337240063BD73 /* KiwiSDK */; settings = {ASSET_TAGS = (); }; };
+		17C64B0C1BC3FD140063BD73 /* KiwiThirdpartySensorStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C64B0B1BC3FD140063BD73 /* KiwiThirdpartySensorStream.m */; settings = {ASSET_TAGS = (); }; };
 		4013B0CF198F18C5009925DA /* AccelerometerFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4013B0CC198F18C5009925DA /* AccelerometerFilter.m */; };
 		4013B0D5198F1D1B009925DA /* APLGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4013B0D4198F1D1B009925DA /* APLGraphView.m */; };
 		402D420F198843BE0011ADB1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402D420E198843BE0011ADB1 /* Foundation.framework */; };
@@ -25,7 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		17C64B081BC337240063BD73 /* KiwiSDK */ = {isa = PBXFileReference; lastKnownFileType = folder; path = KiwiSDK; sourceTree = "<group>"; };
+		17C64B0A1BC3FD140063BD73 /* KiwiThirdpartySensorStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KiwiThirdpartySensorStream.h; path = KiwiSDK/KiwiThirdpartySensorStream.h; sourceTree = "<group>"; };
+		17C64B0B1BC3FD140063BD73 /* KiwiThirdpartySensorStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KiwiThirdpartySensorStream.m; path = KiwiSDK/KiwiThirdpartySensorStream.m; sourceTree = "<group>"; };
 		362524CD4D17712CD975B950 /* libPods-MetaWearApiTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MetaWearApiTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4013B0CB198F18C5009925DA /* AccelerometerFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerFilter.h; sourceTree = "<group>"; };
 		4013B0CC198F18C5009925DA /* AccelerometerFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerFilter.m; sourceTree = "<group>"; };
@@ -82,7 +83,6 @@
 		402D4202198843BE0011ADB1 = {
 			isa = PBXGroup;
 			children = (
-				17C64B081BC337240063BD73 /* KiwiSDK */,
 				4013B0CA198F18C5009925DA /* Accelerometer */,
 				40D97BFA19897CBB00F55A09 /* MetaWearApiTest */,
 				40D97C1119897DE100F55A09 /* Supporting Files */,
@@ -114,6 +114,8 @@
 		40D97BFA19897CBB00F55A09 /* MetaWearApiTest */ = {
 			isa = PBXGroup;
 			children = (
+				17C64B0A1BC3FD140063BD73 /* KiwiThirdpartySensorStream.h */,
+				17C64B0B1BC3FD140063BD73 /* KiwiThirdpartySensorStream.m */,
 				40A6847A199BD25F0054F49D /* StartViewController.h */,
 				40A6847B199BD25F0054F49D /* StartViewController.m */,
 				40D97BF219897CB400F55A09 /* DevicesTableViewController.h */,
@@ -211,7 +213,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				40D97C1619897F0100F55A09 /* InfoPlist.strings in Resources */,
-				17C64B091BC337240063BD73 /* KiwiSDK in Resources */,
 				40D97BF819897CB400F55A09 /* Images.xcassets in Resources */,
 				40D97BF919897CB400F55A09 /* Main.storyboard in Resources */,
 			);
@@ -261,6 +262,7 @@
 				4013B0CF198F18C5009925DA /* AccelerometerFilter.m in Sources */,
 				40D97C1D1989CD1300F55A09 /* DeviceDetailViewController.m in Sources */,
 				4013B0D5198F1D1B009925DA /* APLGraphView.m in Sources */,
+				17C64B0C1BC3FD140063BD73 /* KiwiThirdpartySensorStream.m in Sources */,
 				40D97C0F19897DD700F55A09 /* main.m in Sources */,
 				40A6847C199BD25F0054F49D /* StartViewController.m in Sources */,
 				40D97BF719897CB400F55A09 /* DevicesTableViewController.m in Sources */,
