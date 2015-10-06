@@ -1,6 +1,8 @@
 FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/Metawear-iOSAPI"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/MBProgressHUD" "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI" "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI/MetaWear" "${PODS_ROOT}/Headers/Public/StaticDataTableViewController"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/MBProgressHUD" -isystem "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI" -isystem "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI/MetaWear" -isystem "${PODS_ROOT}/Headers/Public/StaticDataTableViewController"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"MBProgressHUD" -l"StaticDataTableViewController" -framework "CoreGraphics" -framework "MetaWear"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI" "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI/MetaWear"
+LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
+OTHER_CFLAGS = $(inherited) -iquote "$CONFIGURATION_BUILD_DIR/CocoaAsyncSocket.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/MBProgressHUD.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/StaticDataTableViewController.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI" -isystem "${PODS_ROOT}/Headers/Public/Metawear-iOSAPI/MetaWear"
+OTHER_LDFLAGS = $(inherited) -framework "CocoaAsyncSocket" -framework "MBProgressHUD" -framework "MetaWear" -framework "StaticDataTableViewController"
+PODS_FRAMEWORK_BUILD_PATH = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-MetaWearApiTest
 PODS_ROOT = ${SRCROOT}/Pods

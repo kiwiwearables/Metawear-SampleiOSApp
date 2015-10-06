@@ -179,6 +179,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *ambientLightLTR329StopStream;
 @property (weak, nonatomic) IBOutlet UILabel *ambientLightLTR329Illuminance;
 
+
+@property (strong,nonatomic) KiwiThirdpartySensorStream* kiwiSensorStream;
+@property (strong,nonatomic) NSMutableArray* bufferOfAxyz;
+@property (strong,nonatomic) NSMutableArray* bufferOfGxyz;
 @property (nonatomic, strong) NSMutableArray *streamingEvents;
 @end
 
@@ -187,7 +191,16 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    
+    
     [super viewWillAppear:animated];
+    
+    
+    if (!self.kiwiSensorStream) {
+        self.kiwiSensorStream = [KiwiThirdpartySensorStream sharedInstance];
+        self.bufferOfAxyz = [NSMutableArray array];
+        self.bufferOfGxyz = [NSMutableArray array];
+    }
     
     // Use this array to keep track of all streaming events, so turn them off
     // in case the user isn't so responsible
@@ -280,7 +293,7 @@
 {
     [self.connectionSwitch setOn:YES animated:YES];
     // Perform all device specific setup
-
+    
     // We always have the info and state features
     [self cells:self.infoAndStateCells setHidden:NO];
     self.mfgNameLabel.text = self.device.deviceInfo.manufacturerName;
@@ -292,13 +305,13 @@
     [self readBatteryPressed:nil];
     [self readRSSIPressed:nil];
     [self checkForFirmwareUpdatesPressed:nil];
-
-
+    
+    
     // Go through each module and enable the correct cell for the modules on this particular MetaWear
     if (self.device.mechanicalSwitch) {
         [self cell:self.mechanicalSwitchCell setHidden:NO];
     }
-
+    
     if (self.device.led) {
         [self cell:self.ledCell setHidden:NO];
     }
@@ -613,11 +626,11 @@
     [self.stopLog setEnabled:NO];
     
     [self updateAccelerometerSettings];
-
+    
     // These variables are used for data recording
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:1000];
     self.accelerometerDataArray = array;
-
+    
     [self.streamingEvents addObject:self.device.accelerometer.dataReadyEvent];
     [self.device.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *acceleration, NSError *error) {
         [self.accelerometerGraph addX:acceleration.x y:acceleration.y z:acceleration.z];
@@ -682,10 +695,10 @@
                                             dataElement.y,
                                             dataElement.z] dataUsingEncoding:NSUTF8StringEncoding]];
             
-//            [_sensorData appendData: [[NSArray
-//                                       dataElement.x,
-//                                       dataElement.y,
-//                                       dataElement.z]]];
+            //            [_sensorData appendData: [[NSArray
+            //                                       dataElement.x,
+            //                                       dataElement.y,
+            //                                       dataElement.z]]];
             
         }
     }
@@ -703,7 +716,7 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MM_dd_yyyy-HH_mm_ss"];
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
-
+    
     MFMailComposeViewController *emailController = [[MFMailComposeViewController alloc] init];
     emailController.mailComposeDelegate = self;
     
@@ -844,25 +857,38 @@
 
 - (IBAction)accelerometerBMI160StartStreamPressed:(id)sender
 {
+    
     [self.accelerometerBMI160StartStream setEnabled:NO];
     [self.accelerometerBMI160StopStream setEnabled:YES];
     [self.accelerometerBMI160StartLog setEnabled:NO];
     [self.accelerometerBMI160StopLog setEnabled:NO];
     
     [self updateAccelerometerBMI160Settings];
-   
+    
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:1000];
     self.accelerometerBMI160Data = array;
     
     [self.streamingEvents addObject:self.device.accelerometer.dataReadyEvent];
     [self.device.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
+        
+        
+        // send data to the server here.
+        
         [self.accelerometerBMI160Graph addX:obj.x y:obj.y z:obj.z];
         [array addObject:obj];
+        NSNumber* x = [NSNumber numberWithFloat:obj.x];
+        NSNumber* y = [NSNumber numberWithFloat:obj.y];
+        NSNumber* z = [NSNumber numberWithFloat:obj.z];
+
+        [self addX:x andY:y  andZ:z andType:0];
     }];
+    
+    
 }
 
 - (IBAction)accelerometerBMI160StopStreamPressed:(id)sender
 {
+    // Modiify the state here again if button pressed
     [self.accelerometerBMI160StartStream setEnabled:YES];
     [self.accelerometerBMI160StopStream setEnabled:NO];
     [self.accelerometerBMI160StartLog setEnabled:YES];
@@ -877,9 +903,9 @@
     [self.accelerometerBMI160StopLog setEnabled:YES];
     [self.accelerometerBMI160StartStream setEnabled:NO];
     [self.accelerometerBMI160StopStream setEnabled:NO];
- 
+    
     [self updateAccelerometerBMI160Settings];
-
+    
     [self.device.accelerometer.dataReadyEvent startLogging];
 }
 
@@ -922,10 +948,10 @@
     for (MBLAccelerometerData *dataElement in self.accelerometerBMI160Data) {
         @autoreleasepool {
             [accelerometerData appendData:[[NSString stringWithFormat:@"%f,%f,%f,%f\n",
-                                   dataElement.timestamp.timeIntervalSince1970,
-                                   dataElement.x,
-                                   dataElement.y,
-                                   dataElement.z] dataUsingEncoding:NSUTF8StringEncoding]];
+                                            dataElement.timestamp.timeIntervalSince1970,
+                                            dataElement.x,
+                                            dataElement.y,
+                                            dataElement.z] dataUsingEncoding:NSUTF8StringEncoding]];
         }
     }
     [self sendMail:accelerometerData title:@"AccData"];
@@ -937,7 +963,7 @@
     [self.accelerometerBMI160StopTap setEnabled:YES];
     
     [self updateAccelerometerBMI160Settings];
-
+    
     MBLAccelerometerBMI160 *accelerometerBMI160 = (MBLAccelerometerBMI160 *)self.device.accelerometer;
     [self.streamingEvents addObject:accelerometerBMI160.tapEvent];
     [accelerometerBMI160.tapEvent startNotificationsWithHandler:^(id obj, NSError *error) {
@@ -1030,6 +1056,8 @@
     [self.streamingEvents addObject:accelerometerBMI160.stepEvent];
     [accelerometerBMI160.stepEvent startNotificationsWithHandler:^(MBLNumericData *obj, NSError *error) {
         self.accelerometerBMI160StepLabel.text = [NSString stringWithFormat:@"Step Count: %d", ++self.accelerometerBMI160StepCount];
+        
+        
     }];
 }
 
@@ -1092,9 +1120,73 @@
     [self.device.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
         // TODO: Come up with a better graph interface, we need to scale value
         // to show up right
+        
         [self.gyroBMI160Graph addX:obj.x * .008 y:obj.y * .008 z:obj.z * .008];
         [array addObject:obj];
+        
+        
+        NSNumber* x = [NSNumber numberWithFloat:obj.x * .008];
+        NSNumber* y = [NSNumber numberWithFloat:obj.y * .008];
+        NSNumber* z = [NSNumber numberWithFloat:obj.z * .008];
+        [self addX:x andY:y andZ:z andType:1];
     }];
+}
+
+-(void) addX:(NSNumber*) x andY:(NSNumber*) y andZ:(NSNumber*) z andType:(NSUInteger) type {
+    @synchronized(self) {
+        
+        // Accel
+        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+        
+        if (type == 0) {
+            [data setValue:x forKey:@"ax"];
+            [data setValue:y forKey:@"ay"];
+            [data setValue:z forKey:@"az"];
+            
+            
+            [self.bufferOfAxyz addObject:data];
+        }
+        // Gyro
+        else {
+            [data setValue:x forKey:@"gx"];
+            [data setValue:y forKey:@"gy"];
+            [data setValue:z forKey:@"gz"];
+
+            [self.bufferOfGxyz addObject:data];
+        }
+        
+        
+        if ([self.bufferOfGxyz count] >= 1 && [self.bufferOfAxyz count] >= 1) {
+            
+            NSDictionary* axyz = [self.bufferOfAxyz objectAtIndex:0];
+            NSNumber* ax = axyz[@"ax"];
+            NSNumber* ay = axyz[@"ay"];
+            NSNumber* az = axyz[@"az"];
+            
+            [self.bufferOfAxyz removeObjectAtIndex:0];
+            
+            NSDictionary* gxyz = [self.bufferOfGxyz objectAtIndex:0];
+            NSNumber* gx = gxyz[@"gx"];
+            NSNumber* gy = gxyz[@"gy"];
+            NSNumber* gz = gxyz[@"gz"];
+
+            [self.bufferOfGxyz removeObjectAtIndex:0];
+            
+            // Stream a package
+            // grab the package and remove it from the queue
+            
+            NSMutableDictionary* data = [NSMutableDictionary dictionaryWithObjectsAndKeys:ax,@"az",ay,@"ay",az,@"az",gx,@"gy",gy,@"gy",gz,@"gz", nil];
+            NSLog(@"Sending %@",data);
+            [self.kiwiSensorStream fullyStreamForDeviceId:@"Meta1" WithData:data];
+            
+            
+        }else {
+            // no package pairs
+            NSLog(@"Nothing To Send Out");
+        }
+        
+        
+    }
 }
 
 - (IBAction)gyroBMI160StopStreamPressed:(id)sender
@@ -1278,7 +1370,7 @@
     int pwidth = [self.hapticPulseWidth.text intValue];
     pwidth = MIN(pwidth, 10000);
     pwidth = MAX(pwidth, 0);
-
+    
     [sender setEnabled:NO];
     [self.device.hapticBuzzer startBuzzerWithPulseWidth:pwidth completion:^{
         [sender setEnabled:YES];
@@ -1345,7 +1437,7 @@
     } else {
         barometerBMP280.standbyTime = MBLBarometerBMP280Standby4000;
     }
-
+    
     [self.streamingEvents addObject:barometerBMP280.periodicAltitude];
     [barometerBMP280.periodicAltitude startNotificationsWithHandler:^(MBLNumericData *obj, NSError *error) {
         self.barometerBMP280Altitude.text = [NSString stringWithFormat:@"%.3f", obj.value.floatValue];
@@ -1457,41 +1549,44 @@
     self.ambientLightLTR329Illuminance.text = @"X.XXX";
 }
 
-//function to capture raw sensor data and package into stream data array for kiwi library
-- (void)onSensorData:(SensorData*) sensorData {
-    //    dispatch_async(dispatch_get_main_queue(), ^{
-    //        if ( dataCount > 0 && dataCount % kUIPacketRefreshPeriod == 0 ) {
-    
+/**
+ //function to capture raw sensor data and package into stream data array for kiwi library
+ - (void)onSensorData:(SensorData*) sensorData {
+ //    dispatch_async(dispatch_get_main_queue(), ^{
+ //        if ( dataCount > 0 && dataCount % kUIPacketRefreshPeriod == 0 ) {
+ 
+ 
+ //
+ [self.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
+ accelData = NSArray[ obj.x, obj.y, obj.z ]);
+ }];
+ 
+ [self.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
+ gryoData = NSArray[ obj.x, obj.y, obj.z ]);
+ }];
+ 
+ [self.stream streamForDeviceId:@"meta1"
+ AX:[NSNumber numberWithFloat:accelData[0]]
+ AY:[NSNumber numberWithFloat:accelData[1]]
+ AZ:[NSNumber numberWithFloat:accelData[2]]
+ GX:[NSNumber numberWithFloat:gyroData[0]]
+ GY:[NSNumber numberWithFloat:gyroData[1]]
+ GZ:[NSNumber numberWithFloat:gyroData[2]]];
+ 
+ //            float AP = sensorData.accelerometerX * sensorData.accelerometerX + sensorData.accelerometerY * sensorData.accelerometerY + sensorData.accelerometerZ * sensorData.accelerometerZ;
+ //            self.APLabel.text = [NSString stringWithFormat:@"%f", AP];
+ //
+ //            float RP = sensorData.gyroscopeX * sensorData.gyroscopeX + sensorData.gyroscopeY * sensorData.gyroscopeY + sensorData.gyroscopeZ * sensorData.gyroscopeZ;
+ //            self.RPLabel.text = [NSString stringWithFormat:@"%f", RP];
+ 
+ //            NSLog(@"%u %f, %f, %f --------", sensorData.timestamp, sensorData.accelerometerX, sensorData.accelerometerY, sensorData.accelerometerZ );
+ //        }
+ //    });
+ }**/
 
-    //
-    [self.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
-        accelData = NSArray[ obj.x, obj.y, obj.z ]);
-    }];
-    
-    [self.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
-        gryoData = NSArray[ obj.x, obj.y, obj.z ]);
-    }];
-    
-    [self.stream streamForDeviceId:@"meta1"
-                                AX:[NSNumber numberWithFloat:accelData[0]]
-                                AY:[NSNumber numberWithFloat:accelData[1]]
-                                AZ:[NSNumber numberWithFloat:accelData[2]]
-                                GX:[NSNumber numberWithFloat:gyroData[0]]
-                                GY:[NSNumber numberWithFloat:gyroData[1]]
-                                GZ:[NSNumber numberWithFloat:gyroData[2]]];
-    
-    //            float AP = sensorData.accelerometerX * sensorData.accelerometerX + sensorData.accelerometerY * sensorData.accelerometerY + sensorData.accelerometerZ * sensorData.accelerometerZ;
-    //            self.APLabel.text = [NSString stringWithFormat:@"%f", AP];
-    //
-    //            float RP = sensorData.gyroscopeX * sensorData.gyroscopeX + sensorData.gyroscopeY * sensorData.gyroscopeY + sensorData.gyroscopeZ * sensorData.gyroscopeZ;
-    //            self.RPLabel.text = [NSString stringWithFormat:@"%f", RP];
-    
-    //            NSLog(@"%u %f, %f, %f --------", sensorData.timestamp, sensorData.accelerometerX, sensorData.accelerometerY, sensorData.accelerometerZ );
-    //        }
-    //    });
-}
 
 //toggle button connection
+
 - (void)connectKiwi:(BOOL)on
 {
     //run sensorData function every time new data is available
@@ -1501,10 +1596,12 @@
         [[self.accelerometerBMI160Frequency titleForSegmentAtIndex:self.accelerometerBMI160Frequency.selectedSegmentIndex] floatValue];
         [[self.gyroBMI160Frequency titleForSegmentAtIndex:self.gyroBMI160Frequency.selectedSegmentIndex] floatValue];
         
-        [self.accelerometerBMI160StartStream setEnabled:YES];
-        [self.accelerometerBMI160StopStream setEnabled:NO];
-        [self.gyroBMI160StartStream setEnabled:YES];
-        [self.gyroBMI160StopStream setEnabled:NO];
+        // Programmatically do button press and change state.
+        
+        [self.accelerometerBMI160StartStream sendActionsForControlEvents:UIControlEventTouchUpInside];
+        
+        // Programmatical do button press again..
+        [self.gyroBMI160StartStream sendActionsForControlEvents:UIControlEventTouchUpInside];
         
         //run onSensorData function
         

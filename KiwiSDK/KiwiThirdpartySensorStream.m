@@ -32,7 +32,6 @@
     if (self) {
         // Static declarations here
         self.kiwiAsyncUdpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
-        
     }
     return self;
 }
