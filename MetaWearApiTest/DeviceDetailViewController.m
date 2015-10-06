@@ -46,6 +46,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *connectionStateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
+@property (strong) KiwiThirdpartySensorStream *stream;
+@property (strong, nonatomic) NSArray *sensorData;
+@property (strong, nonatomic) NSArray *accelData;
+@property (strong, nonatomic) NSArray *gyroData;
+
 @property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *allCells;
 
 @property (strong, nonatomic) IBOutletCollection(UITableViewCell) NSArray *infoAndStateCells;
@@ -173,8 +178,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *ambientLightLTR329StartStream;
 @property (weak, nonatomic) IBOutlet UIButton *ambientLightLTR329StopStream;
 @property (weak, nonatomic) IBOutlet UILabel *ambientLightLTR329Illuminance;
-
-@property (strong, nonatomic) NSArray *sensorData;
 
 @property (nonatomic, strong) NSMutableArray *streamingEvents;
 @end
@@ -1469,7 +1472,7 @@
         gryoData = NSArray[ obj.x, obj.y, obj.z ]);
     }];
     
-    [self.stream streamForDeviceId:_deviceId
+    [self.stream streamForDeviceId:@"meta1"
                                 AX:[NSNumber numberWithFloat:accelData[0]]
                                 AY:[NSNumber numberWithFloat:accelData[1]]
                                 AZ:[NSNumber numberWithFloat:accelData[2]]
