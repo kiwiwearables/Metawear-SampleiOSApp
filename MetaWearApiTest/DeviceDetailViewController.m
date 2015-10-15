@@ -179,9 +179,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *ambientLightLTR329StopStream;
 @property (weak, nonatomic) IBOutlet UILabel *ambientLightLTR329Illuminance;
 
-@property (weak, nonatomic) NSNumber *accelOn;
-@property (weak, nonatomic) NSNumber *gyroOn;
-
 /* kiwi variables */
 @property (strong,nonatomic) KiwiThirdpartySensorStream* kiwiSensorStream;
 @property (nonatomic, strong) NSMutableArray *streamingEvents;
@@ -226,8 +223,6 @@
     self.sensorValues = [[NSMutableDictionary alloc] init];
     self.sensorValues[@"device_id"] = @"Meta2";
 
-    self.accelOn = @(NO);
-    self.gyroOn = @(NO);
     /* kiwi END*/
 }
 
@@ -877,7 +872,6 @@
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:1000];
     self.accelerometerBMI160Data = array;
     
-    self.accelOn = @(YES);
     
     [self.streamingEvents addObject:self.device.accelerometer.dataReadyEvent];
     [self.device.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
@@ -1127,8 +1121,6 @@
     
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:1000];
     self.gyroBMI160Data = array;
-    
-    self.gyroOn = @(YES);
     
     [self.streamingEvents addObject:self.device.gyro.dataReadyEvent];
     [self.device.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
@@ -1517,36 +1509,13 @@
     if ([self.sensorValues[@"ax"] floatValue] == 0
         || [self.sensorValues[@"gx"] floatValue] == 0) {return;}
     
-    if ([self.gyroOn boolValue]
-        && [self.accelOn boolValue]) {
-        [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
-                                              AX:self.sensorValues[@"ax"]
-                                              AY:self.sensorValues[@"ay"]
-                                              AZ:self.sensorValues[@"az"]
-                                              GX:self.sensorValues[@"gx"]
-                                              GY:self.sensorValues[@"gy"]
-                                              GZ:self.sensorValues[@"gz"]];
-    } else if ([self.gyroOn boolValue]
-               && ![self.accelOn boolValue]) {
-        
-        [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
-                                              AX:nil
-                                              AY:nil
-                                              AZ:nil
-                                              GX:self.sensorValues[@"gx"]
-                                              GY:self.sensorValues[@"gy"]
-                                              GZ:self.sensorValues[@"gz"]];
-    } else if (![self.gyroOn boolValue]
-               && [self.accelOn boolValue]) {
-        
-        [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
-                                              AX:self.sensorValues[@"ax"]
-                                              AY:self.sensorValues[@"ay"]
-                                              AZ:self.sensorValues[@"az"]
-                                              GX:nil
-                                              GY:nil
-                                              GZ:nil];
-    }
+    [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
+                                          AX:self.sensorValues[@"ax"]
+                                          AY:self.sensorValues[@"ay"]
+                                          AZ:self.sensorValues[@"az"]
+                                          GX:self.sensorValues[@"gx"]
+                                          GY:self.sensorValues[@"gy"]
+                                          GZ:self.sensorValues[@"gz"]];
     self.sensorValues[@"ax"] = @0;
     self.sensorValues[@"ay"] = @0;
     self.sensorValues[@"az"] = @0;
