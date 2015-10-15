@@ -179,11 +179,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *ambientLightLTR329StopStream;
 @property (weak, nonatomic) IBOutlet UILabel *ambientLightLTR329Illuminance;
 
+@property (weak, nonatomic) NSNumber *accelOn;
+@property (weak, nonatomic) NSNumber *gyroOn;
 
+/* kiwi variables */
 @property (strong,nonatomic) KiwiThirdpartySensorStream* kiwiSensorStream;
+@property (nonatomic, strong) NSMutableArray *streamingEvents;
+@property (strong, nonatomic) NSMutableDictionary *sensorValues;
 @property (strong,nonatomic) NSMutableArray* bufferOfAxyz;
 @property (strong,nonatomic) NSMutableArray* bufferOfGxyz;
-@property (nonatomic, strong) NSMutableArray *streamingEvents;
+
 @end
 
 @implementation DeviceDetailViewController
@@ -194,13 +199,6 @@
     
     
     [super viewWillAppear:animated];
-    
-    
-    if (!self.kiwiSensorStream) {
-        self.kiwiSensorStream = [KiwiThirdpartySensorStream sharedInstance];
-        self.bufferOfAxyz = [NSMutableArray array];
-        self.bufferOfGxyz = [NSMutableArray array];
-    }
     
     // Use this array to keep track of all streaming events, so turn them off
     // in case the user isn't so responsible
@@ -220,6 +218,17 @@
     
     // Start off the connection flow
     [self connectDevice:YES];
+    
+    /* kiwi START*/
+    
+    self.kiwiSensorStream = [KiwiThirdpartySensorStream sharedInstance];
+    
+    self.sensorValues = [[NSMutableDictionary alloc] init];
+    self.sensorValues[@"device_id"] = @"Meta2";
+
+    self.accelOn = @(NO);
+    self.gyroOn = @(NO);
+    /* kiwi END*/
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -868,19 +877,22 @@
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:1000];
     self.accelerometerBMI160Data = array;
     
+    self.accelOn = @(YES);
+    
     [self.streamingEvents addObject:self.device.accelerometer.dataReadyEvent];
     [self.device.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
         
         
         // send data to the server here.
-        
         [self.accelerometerBMI160Graph addX:obj.x y:obj.y z:obj.z];
         [array addObject:obj];
-        NSNumber* x = [NSNumber numberWithFloat:obj.x];
-        NSNumber* y = [NSNumber numberWithFloat:obj.y];
-        NSNumber* z = [NSNumber numberWithFloat:obj.z];
-
-        [self addX:x andY:y  andZ:z andType:0];
+        
+        // kiwi
+        self.sensorValues[@"ax"] = [NSNumber numberWithFloat:obj.x];
+        self.sensorValues[@"ay"] = [NSNumber numberWithFloat:obj.y];
+        self.sensorValues[@"az"] = [NSNumber numberWithFloat:obj.z];
+        [self sendSensorBuffer];
+        // kiwi
     }];
     
     
@@ -1116,6 +1128,8 @@
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:1000];
     self.gyroBMI160Data = array;
     
+    self.gyroOn = @(YES);
+    
     [self.streamingEvents addObject:self.device.gyro.dataReadyEvent];
     [self.device.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
         // TODO: Come up with a better graph interface, we need to scale value
@@ -1124,68 +1138,13 @@
         [self.gyroBMI160Graph addX:obj.x * .008 y:obj.y * .008 z:obj.z * .008];
         [array addObject:obj];
         
-        NSNumber* x = [NSNumber numberWithFloat:obj.x];
-        NSNumber* y = [NSNumber numberWithFloat:obj.y];
-        NSNumber* z = [NSNumber numberWithFloat:obj.z];
-        [self addX:x andY:y andZ:z andType:1];
+        // kiwi
+        self.sensorValues[@"gx"] = [NSNumber numberWithFloat:obj.x];
+        self.sensorValues[@"gy"] = [NSNumber numberWithFloat:obj.y];
+        self.sensorValues[@"gz"] = [NSNumber numberWithFloat:obj.z];
+        [self sendSensorBuffer];
+        // kiwi
     }];
-}
-
--(void) addX:(NSNumber*) x andY:(NSNumber*) y andZ:(NSNumber*) z andType:(NSUInteger) type {
-    @synchronized(self) {
-        
-        // Accel
-        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-        
-        if (type == 0) {
-            [data setValue:x forKey:@"ax"];
-            [data setValue:y forKey:@"ay"];
-            [data setValue:z forKey:@"az"];
-            
-            
-            [self.bufferOfAxyz addObject:data];
-        }
-        // Gyro
-        else {
-            [data setValue:x forKey:@"gx"];
-            [data setValue:y forKey:@"gy"];
-            [data setValue:z forKey:@"gz"];
-
-            [self.bufferOfGxyz addObject:data];
-        }
-        
-        
-        if ([self.bufferOfGxyz count] >= 1 && [self.bufferOfAxyz count] >= 1) {
-            
-            NSDictionary* axyz = [self.bufferOfAxyz objectAtIndex:0];
-            NSNumber* ax = axyz[@"ax"];
-            NSNumber* ay = axyz[@"ay"];
-            NSNumber* az = axyz[@"az"];
-            
-            [self.bufferOfAxyz removeObjectAtIndex:0];
-            
-            NSDictionary* gxyz = [self.bufferOfGxyz objectAtIndex:0];
-            NSNumber* gx = gxyz[@"gx"];
-            NSNumber* gy = gxyz[@"gy"];
-            NSNumber* gz = gxyz[@"gz"];
-
-            [self.bufferOfGxyz removeObjectAtIndex:0];
-            
-            // Stream a package
-            // grab the package and remove it from the queue
-            
-            NSMutableDictionary* data = [NSMutableDictionary dictionaryWithObjectsAndKeys:ax,@"ax",ay,@"ay",az,@"az",gx,@"gx",gy,@"gy",gz,@"gz", nil];
-            NSLog(@"Sending %@",data);
-            [self.kiwiSensorStream fullyStreamForDeviceId:@"Meta1" WithData:data];
-            
-            
-        }else {
-            // no package pairs
-            NSLog(@"Nothing To Send Out");
-        }
-        
-        
-    }
 }
 
 - (IBAction)gyroBMI160StopStreamPressed:(id)sender
@@ -1548,44 +1507,55 @@
     self.ambientLightLTR329Illuminance.text = @"X.XXX";
 }
 
-/**
- //function to capture raw sensor data and package into stream data array for kiwi library
- - (void)onSensorData:(SensorData*) sensorData {
- //    dispatch_async(dispatch_get_main_queue(), ^{
- //        if ( dataCount > 0 && dataCount % kUIPacketRefreshPeriod == 0 ) {
- 
- 
- //
- [self.accelerometer.dataReadyEvent startNotificationsWithHandler:^(MBLAccelerometerData *obj, NSError *error) {
- accelData = NSArray[ obj.x, obj.y, obj.z ]);
- }];
- 
- [self.gyro.dataReadyEvent startNotificationsWithHandler:^(MBLGyroData *obj, NSError *error) {
- gryoData = NSArray[ obj.x, obj.y, obj.z ]);
- }];
- 
- [self.stream streamForDeviceId:@"meta1"
- AX:[NSNumber numberWithFloat:accelData[0]]
- AY:[NSNumber numberWithFloat:accelData[1]]
- AZ:[NSNumber numberWithFloat:accelData[2]]
- GX:[NSNumber numberWithFloat:gyroData[0]]
- GY:[NSNumber numberWithFloat:gyroData[1]]
- GZ:[NSNumber numberWithFloat:gyroData[2]]];
- 
- //            float AP = sensorData.accelerometerX * sensorData.accelerometerX + sensorData.accelerometerY * sensorData.accelerometerY + sensorData.accelerometerZ * sensorData.accelerometerZ;
- //            self.APLabel.text = [NSString stringWithFormat:@"%f", AP];
- //
- //            float RP = sensorData.gyroscopeX * sensorData.gyroscopeX + sensorData.gyroscopeY * sensorData.gyroscopeY + sensorData.gyroscopeZ * sensorData.gyroscopeZ;
- //            self.RPLabel.text = [NSString stringWithFormat:@"%f", RP];
- 
- //            NSLog(@"%u %f, %f, %f --------", sensorData.timestamp, sensorData.accelerometerX, sensorData.accelerometerY, sensorData.accelerometerZ );
- //        }
- //    });
- }**/
 
 
-//toggle button connection
+#pragma mark - kiwi
 
+
+-(void)sendSensorBuffer {
+    
+    if ([self.sensorValues[@"ax"] floatValue] == 0
+        || [self.sensorValues[@"gx"] floatValue] == 0) {return;}
+    
+    if ([self.gyroOn boolValue]
+        && [self.accelOn boolValue]) {
+        [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
+                                              AX:self.sensorValues[@"ax"]
+                                              AY:self.sensorValues[@"ay"]
+                                              AZ:self.sensorValues[@"az"]
+                                              GX:self.sensorValues[@"gx"]
+                                              GY:self.sensorValues[@"gy"]
+                                              GZ:self.sensorValues[@"gz"]];
+    } else if ([self.gyroOn boolValue]
+               && ![self.accelOn boolValue]) {
+        
+        [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
+                                              AX:nil
+                                              AY:nil
+                                              AZ:nil
+                                              GX:self.sensorValues[@"gx"]
+                                              GY:self.sensorValues[@"gy"]
+                                              GZ:self.sensorValues[@"gz"]];
+    } else if (![self.gyroOn boolValue]
+               && [self.accelOn boolValue]) {
+        
+        [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
+                                              AX:self.sensorValues[@"ax"]
+                                              AY:self.sensorValues[@"ay"]
+                                              AZ:self.sensorValues[@"az"]
+                                              GX:nil
+                                              GY:nil
+                                              GZ:nil];
+    }
+    self.sensorValues[@"ax"] = @0;
+    self.sensorValues[@"ay"] = @0;
+    self.sensorValues[@"az"] = @0;
+    self.sensorValues[@"gx"] = @0;
+    self.sensorValues[@"gy"] = @0;
+    self.sensorValues[@"gz"] = @0;
+}
+
+// toggle button connection
 - (void)connectKiwi:(BOOL)on
 {
     //run sensorData function every time new data is available
@@ -1596,14 +1566,12 @@
 //        [[self.gyroBMI160Frequency titleForSegmentAtIndex:self.gyroBMI160Frequency.selectedSegmentIndex] floatValue];
         
         // Programmatically do button press and change state.
-        
         [self.accelerometerBMI160StartStream sendActionsForControlEvents:UIControlEventTouchUpInside];
         
         // Programmatical do button press again..
         [self.gyroBMI160StartStream sendActionsForControlEvents:UIControlEventTouchUpInside];
         
         //run onSensorData function
-        
         NSLog(@"streaming sensor values");
     }
     @catch (NSException *exception) {
