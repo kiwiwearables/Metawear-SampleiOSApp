@@ -5,3 +5,4 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 pod 'Metawear-iOSAPI'
 pod 'CocoaAsyncSocket'  
+pod 'AFNetworking', '~> 2.0'

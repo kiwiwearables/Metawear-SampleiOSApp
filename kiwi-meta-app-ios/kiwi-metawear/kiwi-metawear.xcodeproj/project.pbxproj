@@ -14,6 +14,8 @@
 		3773A98A1BD19CFF0043FCC6 /* kiwi_metawear.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3773A9881BD19CFF0043FCC6 /* kiwi_metawear.xcdatamodeld */; };
 		3773A98C1BD19CFF0043FCC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3773A98B1BD19CFF0043FCC6 /* Assets.xcassets */; };
 		3773A98F1BD19CFF0043FCC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3773A98D1BD19CFF0043FCC6 /* LaunchScreen.storyboard */; };
+		3773A99B1BD558700043FCC6 /* KiwiThirdpartySensorStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3773A99A1BD558700043FCC6 /* KiwiThirdpartySensorStream.m */; settings = {ASSET_TAGS = (); }; };
+		3773A9A41BD562980043FCC6 /* libKiwiSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3773A9A31BD562980043FCC6 /* libKiwiSDK.a */; settings = {ASSET_TAGS = (); }; };
 		9EDE3C89DF4AB70C1FA00414 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C73BBD95ADF17503AFA7635 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -32,6 +34,12 @@
 		3773A98B1BD19CFF0043FCC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3773A98E1BD19CFF0043FCC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3773A9901BD19CFF0043FCC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3773A9991BD558700043FCC6 /* KiwiThirdpartySensorStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KiwiThirdpartySensorStream.h; path = kiwi/KiwiThirdpartySensorStream.h; sourceTree = SOURCE_ROOT; };
+		3773A99A1BD558700043FCC6 /* KiwiThirdpartySensorStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KiwiThirdpartySensorStream.m; path = kiwi/KiwiThirdpartySensorStream.m; sourceTree = SOURCE_ROOT; };
+		3773A99C1BD55FB60043FCC6 /* KiwiMotionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KiwiMotionModel.h; path = kiwi/KiwiMotionModel.h; sourceTree = SOURCE_ROOT; };
+		3773A99D1BD55FB60043FCC6 /* KiwiUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KiwiUserModel.h; path = kiwi/KiwiUserModel.h; sourceTree = SOURCE_ROOT; };
+		3773A9A01BD560160043FCC6 /* KiwiMotionChannelMaster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KiwiMotionChannelMaster.h; path = "../../../../kiwi-ios/KiwiSDK/KiwiSDK/Classes/Services/KiwiMotionChannelService/KiwiMotionChannelMaster.h"; sourceTree = "<group>"; };
+		3773A9A31BD562980043FCC6 /* libKiwiSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKiwiSDK.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3773A9A41BD562980043FCC6 /* libKiwiSDK.a in Frameworks */,
 				9EDE3C89DF4AB70C1FA00414 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,6 +127,12 @@
 		3773A9981BD19D540043FCC6 /* kiwi */ = {
 			isa = PBXGroup;
 			children = (
+				3773A9A31BD562980043FCC6 /* libKiwiSDK.a */,
+				3773A9A01BD560160043FCC6 /* KiwiMotionChannelMaster.h */,
+				3773A99C1BD55FB60043FCC6 /* KiwiMotionModel.h */,
+				3773A99D1BD55FB60043FCC6 /* KiwiUserModel.h */,
+				3773A9991BD558700043FCC6 /* KiwiThirdpartySensorStream.h */,
+				3773A99A1BD558700043FCC6 /* KiwiThirdpartySensorStream.m */,
 			);
 			name = kiwi;
 			sourceTree = "<group>";
@@ -243,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3773A99B1BD558700043FCC6 /* KiwiThirdpartySensorStream.m in Sources */,
 				3773A9841BD19CFF0043FCC6 /* ViewController.m in Sources */,
 				3773A9811BD19CFF0043FCC6 /* AppDelegate.m in Sources */,
 				3773A97E1BD19CFF0043FCC6 /* main.m in Sources */,
@@ -292,6 +308,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -335,6 +352,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -359,6 +377,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "kiwi-metawear/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/kiwi",
+					"$(PROJECT_DIR)/kiwi-metawear",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kiwi.kiwi-metawear";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -371,6 +394,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "kiwi-metawear/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/kiwi",
+					"$(PROJECT_DIR)/kiwi-metawear",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kiwi.kiwi-metawear";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

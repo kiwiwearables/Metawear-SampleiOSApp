@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6DB51F38D34EDBBEB31298F89D22CD93DC9EE165",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6DB51F38D34EDBBEB31298F89D22CD93DC9EE165" : 0,
+    "E51E4B805ABC33092E9D5DA068DB4B2CA1659839" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "01672C29-34A7-4C93-B944-AE4E81A43230",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6DB51F38D34EDBBEB31298F89D22CD93DC9EE165" : "Metawear-SampleiOSApp-kiwi\/",
+    "E51E4B805ABC33092E9D5DA068DB4B2CA1659839" : "kiwi-ios\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "kiwi-metawear",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "kiwi-meta-app-ios\/kiwi-metawear\/kiwi-metawear.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kiwiwearables\/Metawear-SampleiOSApp-kiwi.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6DB51F38D34EDBBEB31298F89D22CD93DC9EE165"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kiwiwearables\/kiwi-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E51E4B805ABC33092E9D5DA068DB4B2CA1659839"
+    }
+  ]
+}
