@@ -17,6 +17,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *metaWearStatusLabel;
 @property (weak, nonatomic) IBOutlet UIButton *disconnectButton;
 @property (weak, nonatomic) IBOutlet UILabel *kiwiStatusLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *leftArrowImage;
+@property (weak, nonatomic) IBOutlet UIImageView *straightArrowImage;
+@property (weak, nonatomic) IBOutlet UIImageView *rightArrowImage;
+@property (weak, nonatomic) IBOutlet UILabel *leftScoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *strightScoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rightScoreLabel;
 
 // meta wear
 @property (nonatomic, strong) NSArray *devices;
@@ -40,6 +46,7 @@
     self.sensorValues = [[NSMutableDictionary alloc] init];
     self.sensorValues[@"device_id"] = @"Meta2";
     
+    [self updateImages:@""];
     
     /* kiwi START*/
     _kiwiMotionChannelMaster = [KiwiMotionChannelMaster sharedInstance];
@@ -125,17 +132,24 @@
     NSArray *motionArray = notification.userInfo[@"results"];
     
     NSMutableArray *returnedMotionList = [[NSMutableArray alloc] init];
-    
     for (NSDictionary *motionModel in motionArray){
-        NSDictionary *motion = @{
-                                 @"motion_id" : motionModel[@"motion_id"],
-                                 @"motion_name" : motionModel[@"motion_name"],
-                                 @"score" : @([motionModel[@"score"] floatValue] * 10),
-                                 @"threshold" : @([motionModel[@"threshold"] floatValue] * 10)
-                                 };
-        [returnedMotionList addObject:motion];
+        if([motionModel[@"motion_name"] isEqualToString:@"left-turn"]){
+            _leftScoreLabel.text = [NSString stringWithFormat:@"%.f", [motionModel[@"score"] floatValue]];
+        } else if ([motionModel[@"motion_name"] isEqualToString:@"start"]){
+            _strightScoreLabel.text = [NSString stringWithFormat:@"%.f", [motionModel[@"score"] floatValue]];
+        } else if ([motionModel[@"motion_name"] isEqualToString:@"right-turn"]){
+            _rightScoreLabel.text = [NSString stringWithFormat:@"%.f", [motionModel[@"score"] floatValue]];
+        }
+        
+        [returnedMotionList addObject:@{
+                                        @"motion_name" : motionModel[@"motion_name"],
+                                        @"score" : motionModel[@"score"],
+                                        @"threshold" : motionModel[@"threshold"]
+                                        }];
     }
+
     NSLog(@"%@", returnedMotionList);
+    
 }
 
 #pragma mark - Notifications
@@ -149,6 +163,8 @@
                              @"threshold" : @([motionInfo[@"threshold"] floatValue] * 10)
                              };
     
+    NSLog(@"%@", motionInfo[@"motion_name"]);
+    [self updateImages:motionInfo[@"motion_name"]];
 }
 
 
@@ -169,7 +185,7 @@
             if (device.discoveryTimeRSSI.integerValue < MIN_ALLOWED_RSSI) {
                 continue;
             }
-            NSLog(@"%@", device.identifier.UUIDString);
+//            NSLog(@"%@", device.identifier.UUIDString);
             [self updateMetawearStatusLabel:@"Device detected - connecting"];
             [[MBLMetaWearManager sharedManager] stopScanForMetaWears];
             [self connectDevice:device];
@@ -210,6 +226,32 @@
 }
 
 #pragma mark - UI
+
+-(void)updateImages:(NSString*)motionName {
+    
+    _leftArrowImage.alpha = 0.2f;
+    _straightArrowImage.alpha = 0.2f;
+    _rightArrowImage.alpha = 0.2f;
+    
+    UIImageView *imageView;
+    if([motionName isEqualToString:@"left-turn"]){
+        imageView = _leftArrowImage;
+    } else if ([motionName isEqualToString:@"start"]){
+        imageView = _straightArrowImage;
+    } else if ([motionName isEqualToString:@"right-turn"]){
+        imageView = _rightArrowImage;
+    }
+    
+    imageView.hidden = false;
+    imageView.alpha = 1.0f;
+    
+    [UIView animateWithDuration:1 delay:2.0 options:0 animations:^{
+        // Animate the alpha value of your imageView from 1.0 to 0.0 here
+        imageView.alpha = 0.2f;
+    } completion:^(BOOL finished) {
+        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+    }];
+}
 
 -(void)updateMetawearStatusLabel:(NSString*)status {
     _metaWearStatusLabel.text = status;
