@@ -28,16 +28,12 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8oV-gG-gBT">
-                                <rect key="frame" x="179" y="128" width="78" height="30"/>
-                                <state key="normal" title="Disconnect"/>
-                                <connections>
-                                    <action selector="disconnectButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1QX-VW-DK4"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UaH-3m-tHd">
                                 <rect key="frame" x="29" y="128" width="111" height="30"/>
                                 <state key="normal" title="Scan &amp; Connect"/>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="29" y="109" width="111" height="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="scanAndConnectButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Igj-K4-cCy"/>
                                 </connections>
@@ -151,8 +147,18 @@
                                     <rect key="frame" x="109" y="406" width="182" height="69"/>
                                 </variation>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8oV-gG-gBT">
+                                <rect key="frame" x="179" y="128" width="78" height="30"/>
+                                <state key="normal" title="Disconnect"/>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="161" y="109" width="78" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="disconnectButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1QX-VW-DK4"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="Fsb-VC-3Xs"/>
