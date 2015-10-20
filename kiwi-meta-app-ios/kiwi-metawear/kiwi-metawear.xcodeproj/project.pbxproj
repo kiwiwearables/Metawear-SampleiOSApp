@@ -19,6 +19,7 @@
 		3773A9A81BD598AD0043FCC6 /* arrows-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 3773A9A51BD598AC0043FCC6 /* arrows-01.png */; settings = {ASSET_TAGS = (); }; };
 		3773A9A91BD598AD0043FCC6 /* arrows-02.png in Resources */ = {isa = PBXBuildFile; fileRef = 3773A9A61BD598AC0043FCC6 /* arrows-02.png */; settings = {ASSET_TAGS = (); }; };
 		3773A9AA1BD598AD0043FCC6 /* arrows-03.png in Resources */ = {isa = PBXBuildFile; fileRef = 3773A9A71BD598AC0043FCC6 /* arrows-03.png */; settings = {ASSET_TAGS = (); }; };
+		37F845561BD5EBE5003FA4E2 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F845551BD5EBE5003FA4E2 /* logo.png */; settings = {ASSET_TAGS = (); }; };
 		9EDE3C89DF4AB70C1FA00414 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C73BBD95ADF17503AFA7635 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -41,11 +42,12 @@
 		3773A99A1BD558700043FCC6 /* KiwiThirdpartySensorStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KiwiThirdpartySensorStream.m; path = kiwi/KiwiThirdpartySensorStream.m; sourceTree = SOURCE_ROOT; };
 		3773A99C1BD55FB60043FCC6 /* KiwiMotionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KiwiMotionModel.h; path = kiwi/KiwiMotionModel.h; sourceTree = SOURCE_ROOT; };
 		3773A99D1BD55FB60043FCC6 /* KiwiUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KiwiUserModel.h; path = kiwi/KiwiUserModel.h; sourceTree = SOURCE_ROOT; };
-		3773A9A01BD560160043FCC6 /* KiwiMotionChannelMaster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KiwiMotionChannelMaster.h; path = "../../../../kiwi-ios/KiwiSDK/KiwiSDK/Classes/Services/KiwiMotionChannelService/KiwiMotionChannelMaster.h"; sourceTree = "<group>"; };
 		3773A9A31BD562980043FCC6 /* libKiwiSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKiwiSDK.a; sourceTree = "<group>"; };
 		3773A9A51BD598AC0043FCC6 /* arrows-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrows-01.png"; sourceTree = "<group>"; };
 		3773A9A61BD598AC0043FCC6 /* arrows-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrows-02.png"; sourceTree = "<group>"; };
 		3773A9A71BD598AC0043FCC6 /* arrows-03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrows-03.png"; sourceTree = "<group>"; };
+		37F845521BD5DF06003FA4E2 /* KiwiMotionChannelMaster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KiwiMotionChannelMaster.h; sourceTree = "<group>"; };
+		37F845551BD5EBE5003FA4E2 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,11 +135,12 @@
 		3773A9981BD19D540043FCC6 /* kiwi */ = {
 			isa = PBXGroup;
 			children = (
+				37F845551BD5EBE5003FA4E2 /* logo.png */,
 				3773A9A51BD598AC0043FCC6 /* arrows-01.png */,
 				3773A9A61BD598AC0043FCC6 /* arrows-02.png */,
 				3773A9A71BD598AC0043FCC6 /* arrows-03.png */,
 				3773A9A31BD562980043FCC6 /* libKiwiSDK.a */,
-				3773A9A01BD560160043FCC6 /* KiwiMotionChannelMaster.h */,
+				37F845521BD5DF06003FA4E2 /* KiwiMotionChannelMaster.h */,
 				3773A99C1BD55FB60043FCC6 /* KiwiMotionModel.h */,
 				3773A99D1BD55FB60043FCC6 /* KiwiUserModel.h */,
 				3773A9991BD558700043FCC6 /* KiwiThirdpartySensorStream.h */,
@@ -210,6 +213,7 @@
 				3773A98F1BD19CFF0043FCC6 /* LaunchScreen.storyboard in Resources */,
 				3773A9AA1BD598AD0043FCC6 /* arrows-03.png in Resources */,
 				3773A98C1BD19CFF0043FCC6 /* Assets.xcassets in Resources */,
+				37F845561BD5EBE5003FA4E2 /* logo.png in Resources */,
 				3773A9A91BD598AD0043FCC6 /* arrows-02.png in Resources */,
 				3773A9871BD19CFF0043FCC6 /* Main.storyboard in Resources */,
 			);

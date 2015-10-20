@@ -108,14 +108,6 @@
     if ([self.sensorValues[@"ax"] floatValue] == 0
         || [self.sensorValues[@"gx"] floatValue] == 0) {return;}
     
-    [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
-                                          AX:self.sensorValues[@"ax"]
-                                          AY:self.sensorValues[@"ay"]
-                                          AZ:self.sensorValues[@"az"]
-                                          GX:self.sensorValues[@"gx"]
-                                          GY:self.sensorValues[@"gy"]
-                                          GZ:self.sensorValues[@"gz"]];
-    
     NSMutableDictionary *data = [self.sensorValues mutableCopy];
     NSNumber *timestamp = [NSNumber numberWithDouble:([[NSDate date] timeIntervalSince1970] * 1000)];
     [data setValue:timestamp forKey:@"ts"];
@@ -129,6 +121,14 @@
     self.sensorValues[@"gx"] = @0;
     self.sensorValues[@"gy"] = @0;
     self.sensorValues[@"gz"] = @0;
+    
+    [self.kiwiSensorStream streamForDeviceId:self.sensorValues[@"device_id"]
+                                          AX:self.sensorValues[@"ax"]
+                                          AY:self.sensorValues[@"ay"]
+                                          AZ:self.sensorValues[@"az"]
+                                          GX:self.sensorValues[@"gx"]
+                                          GY:self.sensorValues[@"gy"]
+                                          GZ:self.sensorValues[@"gz"]];
 }
 
 - (void) didReceiveMotionScore:(NSNotification *) notification {
@@ -252,7 +252,8 @@
     } else if ([motionName isEqualToString:@"wall-collision"]
                || [motionName isEqualToString:@"wall-collision-1"]) {
         label = _wallLabel;
-    } else if ([motionName isEqualToString:@"stop-1"] || [motionName isEqualToString:@"stop"]) {
+    } else if ([motionName isEqualToString:@"stop-1"]
+               || [motionName isEqualToString:@"stop"]) {
         label = _stopLabel;
     }
     
@@ -262,7 +263,7 @@
         label.alpha = 1.0f;
     }
 
-    [UIView animateWithDuration:1 delay:1.5 options:0 animations:^{
+    [UIView animateWithDuration:1 delay:0.8 options:0 animations:^{
         if (imageView != nil){
             imageView.alpha = 0.2f;
         } else if (label != nil){
