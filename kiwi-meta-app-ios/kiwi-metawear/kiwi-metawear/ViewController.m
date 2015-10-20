@@ -80,15 +80,16 @@
                   [_kiwiMotionChannelMaster addTarget:motionModel];
               }
               _kiwiStatusLabel.text = @"Loaded";
-//              success([[NSArray alloc] initWithArray:motionList]);
               
           } fail:^(KiwiMotionModel *model){
 //              fail(@"error fetching motions");
               NSLog(@"error fetching motions");
+              _kiwiStatusLabel.text = @"error fetching motions";
           }];
      } fail:^(KiwiUserModel *model){
 //         fail(@"error fetching user data");
          NSLog(@"error fetching user data");
+         _kiwiStatusLabel.text = @"error fetching user data";
      }];
     
     /* kiwi END */
@@ -141,30 +142,33 @@
             _rightScoreLabel.text = [NSString stringWithFormat:@"%.f", [motionModel[@"score"] floatValue]];
         }
         
-        [returnedMotionList addObject:@{
-                                        @"motion_name" : motionModel[@"motion_name"],
-                                        @"score" : motionModel[@"score"],
-                                        @"threshold" : motionModel[@"threshold"]
-                                        }];
+        if ([motionModel[@"score"] floatValue] < [motionModel[@"threshold"] floatValue]){
+            [self updateImages:motionModel[@"motion_name"]];
+        }
+//        [returnedMotionList addObject:@{
+//                                        @"motion_name" : motionModel[@"motion_name"],
+//                                        @"score" : motionModel[@"score"],
+//                                        @"threshold" : motionModel[@"threshold"]
+//                                        }];
     }
 
-    NSLog(@"%@", returnedMotionList);
+//    NSLog(@"%@", returnedMotionList);
     
 }
 
 #pragma mark - Notifications
 - (void) didReceiveRecognizedMotion:(NSNotification *) notification {
-    NSDictionary* motionInfo = notification.userInfo;
-    
-    NSDictionary *motion = @{
-                             @"motion_id" : motionInfo[@"motion_id"],
-                             @"motion_name" : motionInfo[@"motion_name"],
-                             @"score" : @([motionInfo[@"score"] floatValue] * 10),
-                             @"threshold" : @([motionInfo[@"threshold"] floatValue] * 10)
-                             };
-    
-    NSLog(@"%@", motionInfo[@"motion_name"]);
-    [self updateImages:motionInfo[@"motion_name"]];
+//    NSDictionary* motionInfo = notification.userInfo;
+//    
+//    NSDictionary *motion = @{
+//                             @"motion_id" : motionInfo[@"motion_id"],
+//                             @"motion_name" : motionInfo[@"motion_name"],
+//                             @"score" : @([motionInfo[@"score"] floatValue] * 10),
+//                             @"threshold" : @([motionInfo[@"threshold"] floatValue] * 10)
+//                             };
+//    
+//    NSLog(@"%@", motionInfo[@"motion_name"]);
+//    [self updateImages:motionInfo[@"motion_name"]];
 }
 
 
