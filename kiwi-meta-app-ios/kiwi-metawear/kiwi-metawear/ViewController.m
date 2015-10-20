@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *leftScoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *strightScoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rightScoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wallLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stopLabel;
 
 // meta wear
 @property (nonatomic, strong) NSArray *devices;
@@ -236,22 +238,36 @@
     _leftArrowImage.alpha = 0.2f;
     _straightArrowImage.alpha = 0.2f;
     _rightArrowImage.alpha = 0.2f;
+    _wallLabel.alpha = 0.2f;
+    _stopLabel.alpha = 0.2f;
     
     UIImageView *imageView;
+    UILabel *label;
     if([motionName isEqualToString:@"left-turn"]){
         imageView = _leftArrowImage;
     } else if ([motionName isEqualToString:@"start"]){
         imageView = _straightArrowImage;
     } else if ([motionName isEqualToString:@"right-turn"]){
         imageView = _rightArrowImage;
+    } else if ([motionName isEqualToString:@"wall-collision"]
+               || [motionName isEqualToString:@"wall-collision-1"]) {
+        label = _wallLabel;
+    } else if ([motionName isEqualToString:@"stop-1"] || [motionName isEqualToString:@"stop"]) {
+        label = _stopLabel;
     }
     
-    imageView.hidden = false;
-    imageView.alpha = 1.0f;
-    
-    [UIView animateWithDuration:1 delay:2.0 options:0 animations:^{
-        // Animate the alpha value of your imageView from 1.0 to 0.0 here
-        imageView.alpha = 0.2f;
+    if (imageView != nil){
+        imageView.alpha = 1.0f;
+    } else if (label != nil){
+        label.alpha = 1.0f;
+    }
+
+    [UIView animateWithDuration:1 delay:1.5 options:0 animations:^{
+        if (imageView != nil){
+            imageView.alpha = 0.2f;
+        } else if (label != nil){
+            label.alpha = 0.2f;
+        }
     } completion:^(BOOL finished) {
         // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
     }];
